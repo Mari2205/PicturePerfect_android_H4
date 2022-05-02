@@ -13,7 +13,7 @@ import android.view.View
 import android.widget.ImageView
 
 val REQUEST_IMAGE_CAPTURE = 1
-//lateinit var currentPhotoPath: String
+//rmlateinit var currentPhotoPath: String
 lateinit var bitmap_image:Bitmap
 
 class MainActivity : AppCompatActivity() {
@@ -21,15 +21,31 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val test = RGB_cube().calculate_distance(listOf<CollourModel>())
-        val t = ""
-    //val c = Color.pack(163,145,121)
+
     }
-    fun getPixelCounter(view: View){
+
+
+    fun btnClick(view: View){
+        val lst = HashMap<CoordinateModel, CollourModel>()
+
+        val pixelCount = getPixelCount()
+
+        for (item in pixelCount){
+            val CCpair = GetCollour(item.x, item.y)
+            lst.put(CCpair.first, CCpair.second)
+        }
+
+        val t = ""
+
+    }
+
+
+    // TODO needs cleaning
+    fun getPixelCount():List<CoordinateModel>{
         val imHeight = bitmap_image.height
         val imWidth = bitmap_image.width
 
-        val rgbCollourCodesLst = mutableListOf<CollourModel>()
+        val coordinatesLst = mutableListOf<CoordinateModel>()
         // X = width and Y = Height
         var heightCount:Int = 0
         var totalCount:Int = 0
@@ -42,26 +58,24 @@ class MainActivity : AppCompatActivity() {
                 totalCount += 1
                 Log.d("count", "Wigth count is $widthCount")
 
-                rgbCollourCodesLst.add(GetCollour(widthCount,heightCount))
-                val t = ""
+                coordinatesLst.add(CoordinateModel(widthCount, heightCount))
             }
         }
         Log.d("count", "total count of pixles is ${totalCount.toString()}")
 
-        val tl = test(rgbCollourCodesLst)
-        val diffnums = GetDifficeNum(tl)
-       FindTheMustUsedCollour(tl,diffnums)
-        val t = ""
+        return coordinatesLst
     }
 
-    fun GetCollour(x:Int, y:Int):CollourModel{ //TODO: return pair<Coordinate, Collour>
 
+    fun GetCollour(x:Int, y:Int):Pair<CoordinateModel, CollourModel>{
+
+//rm        val lst = HashMap<CoordinateModel, CollourModel>()
         val pixel: Int = bitmap_image.getPixel(x, y)
         val red = Color.red(pixel)
         val green = Color.green(pixel)
         val blue = Color.blue(pixel)
 
-        return CollourModel(red, green, blue)
+        return Pair(CoordinateModel(x, y), CollourModel(red, green, blue))
     }
 
     fun test (rgbCollourLst:List<CollourModel>):List<Int>{
@@ -84,6 +98,19 @@ class MainActivity : AppCompatActivity() {
             map.put(item, tesAll)
         }
 
+        var value = 0
+        var biggest = 0
+        for (item in map){
+
+                if (biggest < item.value){
+                    value = item.key
+                    biggest = item.value
+                }
+
+        }
+        value
+        biggest
+
         map.toSortedMap()
         val t = ""
 
@@ -98,6 +125,9 @@ class MainActivity : AppCompatActivity() {
         }
         return diffLst
     }
+
+
+
 
     fun takepicture_btnclick(view: View){
         dispatchTakePictureIntent(view)

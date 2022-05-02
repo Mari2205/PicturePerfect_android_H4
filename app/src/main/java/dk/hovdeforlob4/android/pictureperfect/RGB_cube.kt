@@ -9,24 +9,24 @@ class RGB_cube {
      * this method calculate the value between the elements in the list of collourmodel
      */
     fun calculate_distance(colourLst:List<CollourModel>): Int{
+        TODO("")
+//rm        val collourDistance = Math.sqrt(Math.pow((227.0 - 255.0), 2.0) +
+//rm                                        Math.pow((133.0 - 192.0), 2.0) +
+//rm                                        Math.pow((29.0  - 0.0),   2.0))
+//rm
+//rm        val decimalFormat = DecimalFormat("#.##")
+//rm        decimalFormat.roundingMode = RoundingMode.CEILING
+//rm        val roundetcollourDistance = decimalFormat.format(collourDistance)
 
-//        val collourDistance = Math.sqrt(Math.pow((227.0 - 255.0), 2.0) +
-//                                        Math.pow((133.0 - 192.0), 2.0) +
-//                                        Math.pow((29.0  - 0.0),   2.0))
+//        calculateColourDistance(CollourModel(255, 192, 0), CollourModel(227, 133, 29))
 //
-//        val decimalFormat = DecimalFormat("#.##")
-//        decimalFormat.roundingMode = RoundingMode.CEILING
-//        val roundetcollourDistance = decimalFormat.format(collourDistance)
-
-        calculateColourDistance(CollourModel(255, 192, 0), CollourModel(227, 133, 29))
-
-        var totalDistance = 0
-        for (item in colourLst){
-            for (item2 in colourLst){
-                calculateColourDistance(item, item2)
-            }
-        }
-        return  0
+//        var totalDistance = 0
+//        for (item in colourLst){
+//            for (item2 in colourLst){
+//                calculateColourDistance(item, item2)
+//            }
+//        }
+    //        return  0
     }
 
 
