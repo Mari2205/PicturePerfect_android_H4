@@ -21,38 +21,48 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-
+        val test = RGB_cube().calculate_distance(listOf<CollourModel>())
+        val t = ""
     //val c = Color.pack(163,145,121)
     }
     fun getPixelCounter(view: View){
         val imHeight = bitmap_image.height
         val imWidth = bitmap_image.width
 
+        val rgbCollourCodesLst = mutableListOf<CollourModel>()
+        // X = width and Y = Height
         var heightCount:Int = 0
         var totalCount:Int = 0
-        for (P in 0 until imHeight) {
+        for (P in 0 until imHeight-1) {
             heightCount += 1
             var widthCount:Int = 0
             Log.d("count", "Height count is $heightCount")
-            for (pixel in 0 until imWidth) {
+            for (pixel in 0 until imWidth-1) {
                 widthCount += 1
                 totalCount += 1
                 Log.d("count", "Wigth count is $widthCount")
+
+                rgbCollourCodesLst.add(GetCollour(widthCount,heightCount))
+                val t = ""
             }
         }
         Log.d("count", "total count of pixles is ${totalCount.toString()}")
 
 
-        val pixel: Int = bitmap_image.getPixel(1, 100)
-        val red = Color.red(pixel)
-        val green = Color.green(pixel)
-        val blue = Color.blue(pixel)
-
-        val str = "${red.toString()} : ${green.toString()} : ${blue.toString()}"
+//        val pixel: Int = bitmap_image.getPixel(1, 100)
+//        val red = Color.red(pixel)
+//        val green = Color.green(pixel)
+//        val blue = Color.blue(pixel)
+//
+//        val str = "${red.toString()} : ${green.toString()} : ${blue.toString()}"
+        val t = ""
     }
 
-    fun GetCollour(x:Int, y:Int):CollourModel{
-        
+    fun GetCollour(x:Int, y:Int):CollourModel{ //TODO: return pair<Coordinate, Collour>
+
+        if (x > 110 || y > 110){
+            val t = ""
+        }
         val pixel: Int = bitmap_image.getPixel(x, y)
         val red = Color.red(pixel)
         val green = Color.green(pixel)
