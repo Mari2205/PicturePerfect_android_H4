@@ -48,21 +48,14 @@ class MainActivity : AppCompatActivity() {
         }
         Log.d("count", "total count of pixles is ${totalCount.toString()}")
 
-
-//        val pixel: Int = bitmap_image.getPixel(1, 100)
-//        val red = Color.red(pixel)
-//        val green = Color.green(pixel)
-//        val blue = Color.blue(pixel)
-//
-//        val str = "${red.toString()} : ${green.toString()} : ${blue.toString()}"
+        val tl = test(rgbCollourCodesLst)
+        val diffnums = GetDifficeNum(tl)
+       FindTheMustUsedCollour(tl,diffnums)
         val t = ""
     }
 
     fun GetCollour(x:Int, y:Int):CollourModel{ //TODO: return pair<Coordinate, Collour>
 
-        if (x > 110 || y > 110){
-            val t = ""
-        }
         val pixel: Int = bitmap_image.getPixel(x, y)
         val red = Color.red(pixel)
         val green = Color.green(pixel)
@@ -71,8 +64,40 @@ class MainActivity : AppCompatActivity() {
         return CollourModel(red, green, blue)
     }
 
+    fun test (rgbCollourLst:List<CollourModel>):List<Int>{
+        val outputLst = mutableListOf<Int>()
 
+        for (item in rgbCollourLst){
+            val collourNum = item.red + item.green + item.blue
+            outputLst.add(collourNum)
+        }
 
+        return  outputLst
+    }
+
+    fun FindTheMustUsedCollour(numLst:List<Int>, diffNumslst:List<Int>){
+       val map = HashMap<Int, Int>()
+        for (item in diffNumslst){
+
+            val tes = numLst.count{it == 706}
+            val tesAll = numLst.count{it == item}
+            map.put(item, tesAll)
+        }
+
+        map.toSortedMap()
+        val t = ""
+
+    }
+
+    fun GetDifficeNum(numlst:List<Int>):List<Int>{
+        val diffLst = mutableListOf<Int>()
+        for (item in numlst){
+            if(!diffLst.contains(item)){
+                diffLst.add(item)
+            }
+        }
+        return diffLst
+    }
 
     fun takepicture_btnclick(view: View){
         dispatchTakePictureIntent(view)
