@@ -36,7 +36,7 @@ class MainActivity : AppCompatActivity() {
             coordinateAndColourCodeHmap[xyCoord] = rgbColour
         }
         val diffColourLst = GetDifficeNum(coordinateAndColourCodeHmap)
-
+        val f = FindTheMustUsedCollour(coordinateAndColourCodeHmap, diffColourLst)
         calcdisLowerthen20(coordinateAndColourCodeHmap)
         GrupeColour(coordinateAndColourCodeHmap)
 
@@ -133,24 +133,61 @@ class MainActivity : AppCompatActivity() {
         return  outputLst
     }
 
-    fun FindTheMustUsedCollour(numLst:List<Int>, diffNumslst:List<Int>){
-       val map = HashMap<Int, Int>()
-        for (item in diffNumslst){
-//            val tes = numLst.count{it == 706}
-            val tesAll = numLst.count{it == item}
-            map.put(item, tesAll)
+    fun FindTheMustUsedCollour(numLst:HashMap<CoordinateModel, ColourModel>, diffNumslst:List<ColourModel>):Map<String, Int>{
+        val hmap = HashMap<Int, ColourModel>()
+        val test = mutableListOf<ColourModel>()
+        test.addAll(diffNumslst)
+
+        val strLst = mutableListOf<String>()
+
+        for (item in numLst){
+            val blue = item.value.blue
+            val green = item.value.green
+            val red = item.value.red
+
+            strLst.add("$red,$green,$blue")
         }
 
-        var value = 0
-        var biggest = 0
-        for (item in map) {
-            if (biggest < item.value) {
-                value = item.key
-                biggest = item.value
-            }
-        }
-        value
-        biggest
+        val lstS = strLst.groupingBy { it }.eachCount().filter { it.value > 1 }
+
+        return lstS
+
+
+
+//        for (item in numLst){
+//            var count = 0
+//            for (item2 in test){
+//                Log.d("t" , "log : ${item.value.red}, ${item.value.green}, ${item.value.blue}")
+//
+//                if (item.value.red == item2.red && item.value.green == item2.green && item.value.blue == item2.blue){
+//                    count += 1
+//
+//                }
+//            }
+//
+//            hmap[count] = ColourModel(item.value.red, item.value.green, item.value.blue)
+//        }
+//
+//        val t =""
+
+
+//        val map = HashMap<ColourModel, Int>()
+//        for (item in diffNumslst){
+////            val tes = numLst.count{it == 706}
+//            val tesAll = numLst.count{it.value == item}
+//            map.put(ColourModel(item.red,item.green,item.blue), tesAll)
+//        }
+//
+//        var value = 0
+//        var biggest = 0
+//        for (item in map) {
+//            if (biggest < item.value) {
+//                value = item.key
+//                biggest = item.value
+//            }
+//        }
+//        value
+//        biggest
 
 //        map.toSortedMap()
 //        val t = ""
@@ -159,112 +196,27 @@ class MainActivity : AppCompatActivity() {
 
     fun GetDifficeNum(numlst:HashMap<CoordinateModel, ColourModel>):List<ColourModel>{
         val diffLst = mutableListOf<ColourModel>()
-        val templst = mutableListOf<ColourModel>()
-//        for (item in numlst){
-//            Log.d("tag", "loooop : ${item.value.red}, ${item.value.green}, ${item.value.blue}")
-//        }
-//        for (item in numlst){
-//            for (item2 in diffLst + 1){
-//                val t = ""
-//            }
-//        }
-//        val numlstKeys = numlst.keys
-////        val de = f.first()
-//        val x = numlstKeys.first().x
-//        val y = numlstKeys.first().y
-//        val coord = CoordinateModel(x, y)
+        val strLst = mutableListOf<String>()
 
-//        val lst2 = mutableListOf<Int>()
-//        val lst = mutableListOf<Int>()
-//        val lst3 = mutableListOf<Int>()
-//        lst.add(21)
-//        lst2.add(12)
-//        lst2.add(12)
-//        lst2.add(12)
-//
-//        for (itr in lst) {
-//           for (fff in lst2){
-//                lst.add(1)
-//            }
-////            lst.add(lst3[0])
-////            lst3.removeAll(lst3)
-//            val t =""
-//        }
-
-        val lst23 = mutableListOf<String>()
         for (item in numlst){
             val blue = item.value.blue
             val green = item.value.green
             val red = item.value.red
 
-            lst23.add("$red,$green,$blue")
-
+            strLst.add("$red,$green,$blue")
         }
 
-        val e = lst23.toTypedArray()
-        val f = e.distinct()
+        val strArr = strLst.toTypedArray()
+        val uniqueValuesStrArr  = strArr.distinct()
 
-        for (item in f){
+        for (item in uniqueValuesStrArr){
             val d = item.split(",")
             val red = d[0].toInt()
             val green = d[1].toInt()
             val blue = d[2].toInt()
             diffLst.add(ColourModel(red,green, blue))
-            val t =""
         }
 
-
-
-
-//        var count = 0
-//        var isFirstItem2 = true
-//        for (item in numlst) {
-//            if (isFirstItem2){
-//                diffLst.add(item.value)
-//                isFirstItem2 = false
-//            }
-//
-//            for (diffItem in diffLst) {
-//                if (diffItem.red != item.value.red &&
-//                    diffItem.green != item.value.green &&
-//                    diffItem.blue != item.value.blue) {
-//
-//                    templst.add(item.value)
-//                }
-//                count += 1
-//                Log.d("ta", "$count) log c ${diffItem.red}, ${diffItem.green}, ${diffItem.blue}")
-//            }
-//            diffLst.addAll(templst)
-//            templst.removeAll(templst)
-//            val t = ""
-//        }
-//
-//
-//
-//
-//
-//
-//
-//
-//
-////        val t = ""
-//        var isFirstItem = true
-//        for (item in numlst) {
-//            if (isFirstItem){
-//                diffLst.add(item.value)
-//                isFirstItem = false
-//            }
-//            for (diffItem in diffLst) {
-//                val t = ""
-//
-//                if (diffItem.red != item.value.red && diffItem.green != item.value.green && diffItem.blue != item.value.blue) {
-//                    diffLst.add(item.value)
-//                }
-//            }
-////            if (!diffLst.contains(item.value)){
-////                diffLst.add(item.value)
-////            }
-//        }
         return diffLst
     }
 
