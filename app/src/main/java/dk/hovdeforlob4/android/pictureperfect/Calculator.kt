@@ -3,12 +3,12 @@ package dk.hovdeforlob4.android.pictureperfect
 import java.math.RoundingMode
 import java.text.DecimalFormat
 
-class RGB_cube {
+class Calculator {
 
     /**
      * this method calculate the value between the elements in the list of collourmodel
      */
-    fun calculate_distance(colourLst:List<CollourModel>): Int{
+    fun calculate_distance(colourLst:List<ColourModel>): Int{
         TODO("")
 //rm        val collourDistance = Math.sqrt(Math.pow((227.0 - 255.0), 2.0) +
 //rm                                        Math.pow((133.0 - 192.0), 2.0) +
@@ -36,7 +36,7 @@ class RGB_cube {
      * @param collour2 : CollourModel
      * @return Double
      */
-    private fun calculateColourDistance(collour1:CollourModel, collour2: CollourModel): Double{
+    fun calculateColourDistance(collour1:ColourModel, collour2: ColourModel): Double{
         val redC1   = collour1.red.toDouble()
         val greenC1 = collour1.green.toDouble()
         val blueC1  = collour1.blue.toDouble()
@@ -49,10 +49,10 @@ class RGB_cube {
                                         Math.pow((greenC2 - greenC1), 2.0) +
                                         Math.pow((blueC2  - blueC1),  2.0))
 
-        val decimalFormat = DecimalFormat("#.##")
-        decimalFormat.roundingMode = RoundingMode.CEILING
-        val roundetcollourDistance = decimalFormat.format(collourDistance).toDouble()
+//        val decimalFormat = DecimalFormat("#.##")
+//        decimalFormat.roundingMode = RoundingMode.CEILING
+//        val roundetcollourDistance = decimalFormat.format(collourDistance).toDouble()
 
-        return roundetcollourDistance
+        return collourDistance
     }
 }
