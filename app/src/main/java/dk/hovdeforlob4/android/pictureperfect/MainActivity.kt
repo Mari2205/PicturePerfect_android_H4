@@ -159,11 +159,112 @@ class MainActivity : AppCompatActivity() {
 
     fun GetDifficeNum(numlst:HashMap<CoordinateModel, ColourModel>):List<ColourModel>{
         val diffLst = mutableListOf<ColourModel>()
+        val templst = mutableListOf<ColourModel>()
+//        for (item in numlst){
+//            Log.d("tag", "loooop : ${item.value.red}, ${item.value.green}, ${item.value.blue}")
+//        }
+//        for (item in numlst){
+//            for (item2 in diffLst + 1){
+//                val t = ""
+//            }
+//        }
+//        val numlstKeys = numlst.keys
+////        val de = f.first()
+//        val x = numlstKeys.first().x
+//        val y = numlstKeys.first().y
+//        val coord = CoordinateModel(x, y)
+
+//        val lst2 = mutableListOf<Int>()
+//        val lst = mutableListOf<Int>()
+//        val lst3 = mutableListOf<Int>()
+//        lst.add(21)
+//        lst2.add(12)
+//        lst2.add(12)
+//        lst2.add(12)
+//
+//        for (itr in lst) {
+//           for (fff in lst2){
+//                lst.add(1)
+//            }
+////            lst.add(lst3[0])
+////            lst3.removeAll(lst3)
+//            val t =""
+//        }
+
+        val lst23 = mutableListOf<String>()
         for (item in numlst){
-            if (!diffLst.contains(item.value)){
-                diffLst.add(item.value)
-            }
+            val blue = item.value.blue
+            val green = item.value.green
+            val red = item.value.red
+
+            lst23.add("$red,$green,$blue")
+
         }
+
+        val e = lst23.toTypedArray()
+        val f = e.distinct()
+
+        for (item in f){
+            val d = item.split(",")
+            val red = d[0].toInt()
+            val green = d[1].toInt()
+            val blue = d[2].toInt()
+            diffLst.add(ColourModel(red,green, blue))
+            val t =""
+        }
+
+
+
+
+//        var count = 0
+//        var isFirstItem2 = true
+//        for (item in numlst) {
+//            if (isFirstItem2){
+//                diffLst.add(item.value)
+//                isFirstItem2 = false
+//            }
+//
+//            for (diffItem in diffLst) {
+//                if (diffItem.red != item.value.red &&
+//                    diffItem.green != item.value.green &&
+//                    diffItem.blue != item.value.blue) {
+//
+//                    templst.add(item.value)
+//                }
+//                count += 1
+//                Log.d("ta", "$count) log c ${diffItem.red}, ${diffItem.green}, ${diffItem.blue}")
+//            }
+//            diffLst.addAll(templst)
+//            templst.removeAll(templst)
+//            val t = ""
+//        }
+//
+//
+//
+//
+//
+//
+//
+//
+//
+////        val t = ""
+//        var isFirstItem = true
+//        for (item in numlst) {
+//            if (isFirstItem){
+//                diffLst.add(item.value)
+//                isFirstItem = false
+//            }
+//            for (diffItem in diffLst) {
+//                val t = ""
+//
+//                if (diffItem.red != item.value.red && diffItem.green != item.value.green && diffItem.blue != item.value.blue) {
+//                    diffLst.add(item.value)
+//                }
+//            }
+////            if (!diffLst.contains(item.value)){
+////                diffLst.add(item.value)
+////            }
+//        }
         return diffLst
     }
 
