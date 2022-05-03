@@ -10,6 +10,9 @@ import android.provider.MediaStore
 import android.util.Log
 import android.view.View
 import android.widget.ImageView
+import android.widget.TextView
+import java.util.*
+import kotlin.collections.HashMap
 
 val REQUEST_IMAGE_CAPTURE = 1
 //rmlateinit var currentPhotoPath: String
@@ -37,26 +40,72 @@ class MainActivity : AppCompatActivity() {
         }
         val diffColourLst = GetDifficeNum(coordinateAndColourCodeHmap)
         val coloursUsed = FindTheMustUsedCollour(coordinateAndColourCodeHmap, diffColourLst)
-        val lst = calcdisLowerthen20(coloursUsed)
-        GrupeColour(coordinateAndColourCodeHmap)
+        val coverted = ConvertToColourModel(coloursUsed)
+        val lst = calcdisLowerthen20(coverted)
 
+        val groups = GrupeColour(lst)
+        val sum = SumCount(groups)
+        val top5 = Top5(sum)
+
+        printToTxtbox(top5)
         val t = ""
 
     }
 
-    fun ConvertToColourModel(strHmap:HashMap<String, Int>){
+    fun printToTxtbox(lst:HashMap<Int, ColourModel>){
+        val txtBox = findViewById<TextView>(R.id.textView)
+        var text = ""
+        for (item in lst){
+            text += "ca count of pixels : ${item.key} - colour nyance : [${item.value.red}, ${item.value.green}, ${item.value.blue}]\n"
+        }
+        txtBox.text = text
+
+    }
+
+    fun Top5(hm:HashMap<Int, ColourModel>):HashMap<Int, ColourModel>{
+        var count = 0
+        val hms = hm.toSortedMap(reverseOrder())
+        val lst = HashMap<Int, ColourModel>()
+
+
+//        for (item in hms){
+//            count += 1
+//            if (count == 5){
+//                return lst
+//
+//            }
+//            else{
+//                lst.remove(item.key)
+//            }
+//
+//        }
+        for (i in hms){
+            count += 1
+            if (count == 6){
+                return lst
+            }
+            else{
+                lst[i.key] = i.value
+            }
+        }
+        return hm
+    }
+
+    fun ConvertToColourModel(strHmap:HashMap<String, Int>):HashMap<ColourModel, Int>{
         val hMap = HashMap<ColourModel, Int>()
 
-        val f = strHmap.keys.toTypedArray()
-        val uniqueValuesStrArr  = f.distinct()
+//        val f = strHmap.keys.toTypedArray()
+//        val uniqueValuesStrArr  = f.distinct()
 
-        for (item in uniqueValuesStrArr){
-            val d = item.split(",")
+        for (item in strHmap){
+            val d = item.key.split(",")
             val red = d[0].toInt()
             val green = d[1].toInt()
             val blue = d[2].toInt()
-            hMap[ColourModel(red,green, blue)] = 
+            hMap[ColourModel(red,green, blue)] = item.value
         }
+
+        return hMap
     }
 
 
@@ -98,28 +147,79 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    fun GrupeColour(xycoordAndRgbColour:HashMap<CoordinateModel, ColourModel>){
+    fun GrupeColour(xycoordAndRgbColour:List<ColourDis_Model>): List<ColourGroupe>{
         val groupeLst = mutableListOf<ColourGroupe>()
-        var groupeNum = 1
+        var groupeNum = 0
 
-//        val discalc = Calculator().calculate_distance()
-        for (item in xycoordAndRgbColour){
+        val has = HashMap<String, ColourGroupe>()
+
+////        val discalc = Calculator().calculate_distance()
+//        for (item in xycoordAndRgbColour){
+//
+//        }
+
+        for (item in xycoordAndRgbColour) {
+            Log.d(
+                "grpus",
+                "data : Count: ${item.Cont2} dis: ${item.distance} | ${item.colour1.red}, ${item.colour1.green}, ${item.colour1.blue} - ${item.colour2.red}, ${item.colour2.green}, ${item.colour2.blue}"
+            )
+
+            val blue = item.colour1.blue
+            val green = item.colour1.green
+            val red = item.colour1.red
+
+            val i = "$red,$green,$blue"
+
+            has[i] = ColourGroupe(groupeNum, item.colour2, item.Cont2)
 
         }
 
-        for (item in xycoordAndRgbColour){
-            val groupeItemLst = mutableListOf<GroupeItem_Model>()
-
-            val coord = item.key
-            val rgbColour = item.value
-            val groupeItem = GroupeItem_Model(coord, rgbColour)
-            groupeItemLst.add(groupeItem)
-            groupeLst.add(ColourGroupe(groupeNum, groupeItemLst.toList()))
-
+        val f = mutableListOf<ColourGroupe>()
+        for (item in has){
+            for (item2 in has){
+                if (item.key == item2.key){
+                    groupeNum += 1
+                    f.add(ColourGroupe(groupeNum, item2.value.colour, item2.value.count))
+                }
+            }
         }
+
+        //            val groupeItemLst = mutableListOf<GroupeItem_Model>()
+
+
+
+//            val coord = item
+//            val rgbColour = item.
+//            val groupeItem = GroupeItem_Model(coord, rgbColour)
+//            groupeItemLst.add(groupeItem)
+//            groupeLst.add(ColourGroupe(groupeNum, groupeItemLst.toList()))
+
+
+        return f
     }
 
-    fun calcdisLowerthen20(xycoordAndRgbColour:HashMap<String, Int>):List<ColourDis_Model>{
+    fun SumCount(lst:List<ColourGroupe>): HashMap<Int, ColourModel>{
+        var cout = 0
+        var color = ColourModel(0,0,0)
+        val hm = HashMap<Int, ColourModel>()
+
+        for (co in lst){
+            cout = 0
+            for (item in lst){
+                if (co.groupeId == item.groupeId){
+                    cout += item.count
+                    color = item.colour
+                }
+            }
+            hm[cout] = color
+        }
+
+        return hm
+    }
+
+
+
+    fun calcdisLowerthen20(xycoordAndRgbColour:HashMap<ColourModel, Int>):List<ColourDis_Model>{
         val calc = Calculator()
         val disLst = mutableListOf<ColourDis_Model>()
 
@@ -127,10 +227,13 @@ class MainActivity : AppCompatActivity() {
 
         for (item1 in xycoordAndRgbColour){
             for (item2 in xycoordAndRgbColour){
-                val dis = calc.calculateColourDistance(item1.value, item2.value)
-                if (dis <= 20.0){
-                    disLst.add(ColourDis_Model(dis, item1.value, item2.value))
-                    Log.d("tag", "loop")
+                if (item1.key != item2.key){
+                    val dis = calc.calculateColourDistance(item1.key, item2.key)
+                    if (dis <= 20.0){
+                        disLst.add(ColourDis_Model(dis, item1.key, item2.key, item1.value, item2.value))
+                        Log.d("tag", "loop")
+                    }
+
                 }
             }
         }
