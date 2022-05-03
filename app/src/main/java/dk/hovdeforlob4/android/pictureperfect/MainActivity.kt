@@ -36,12 +36,27 @@ class MainActivity : AppCompatActivity() {
             coordinateAndColourCodeHmap[xyCoord] = rgbColour
         }
         val diffColourLst = GetDifficeNum(coordinateAndColourCodeHmap)
-        val f = FindTheMustUsedCollour(coordinateAndColourCodeHmap, diffColourLst)
-        calcdisLowerthen20(coordinateAndColourCodeHmap)
+        val coloursUsed = FindTheMustUsedCollour(coordinateAndColourCodeHmap, diffColourLst)
+        val lst = calcdisLowerthen20(coloursUsed)
         GrupeColour(coordinateAndColourCodeHmap)
 
         val t = ""
 
+    }
+
+    fun ConvertToColourModel(strHmap:HashMap<String, Int>){
+        val hMap = HashMap<ColourModel, Int>()
+
+        val f = strHmap.keys.toTypedArray()
+        val uniqueValuesStrArr  = f.distinct()
+
+        for (item in uniqueValuesStrArr){
+            val d = item.split(",")
+            val red = d[0].toInt()
+            val green = d[1].toInt()
+            val blue = d[2].toInt()
+            hMap[ColourModel(red,green, blue)] = 
+        }
     }
 
 
@@ -104,9 +119,10 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun calcdisLowerthen20(xycoordAndRgbColour:HashMap<CoordinateModel, ColourModel>):List<ColourDis_Model>{
+    fun calcdisLowerthen20(xycoordAndRgbColour:HashMap<String, Int>):List<ColourDis_Model>{
         val calc = Calculator()
         val disLst = mutableListOf<ColourDis_Model>()
+
         Log.d("tag", "clac met run")
 
         for (item1 in xycoordAndRgbColour){
@@ -133,8 +149,8 @@ class MainActivity : AppCompatActivity() {
         return  outputLst
     }
 
-    fun FindTheMustUsedCollour(numLst:HashMap<CoordinateModel, ColourModel>, diffNumslst:List<ColourModel>):Map<String, Int>{
-        val hmap = HashMap<Int, ColourModel>()
+    fun FindTheMustUsedCollour(numLst:HashMap<CoordinateModel, ColourModel>, diffNumslst:List<ColourModel>):HashMap<String, Int>{
+        val hmap = HashMap<String, Int>()
         val test = mutableListOf<ColourModel>()
         test.addAll(diffNumslst)
 
@@ -148,9 +164,13 @@ class MainActivity : AppCompatActivity() {
             strLst.add("$red,$green,$blue")
         }
 
-        val lstS = strLst.groupingBy { it }.eachCount().filter { it.value > 1 }
+        val lstS = strLst.groupingBy { it }.eachCount().filter { it.value > 1 }.toMap()
 
-        return lstS
+        for (item in lstS){
+            hmap[item.key] = item.value
+        }
+
+        return hmap
 
 
 
