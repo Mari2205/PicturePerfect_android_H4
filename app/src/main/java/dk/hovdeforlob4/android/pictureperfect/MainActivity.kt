@@ -30,100 +30,39 @@ class MainActivity : AppCompatActivity() {
 
 
     fun btnClick(view: View){
-//        val coordinateAndColourCodeHmap = HashMap<CoordinateModel, ColourModel>()
-
         val pixelCoordinates = GetPixelesCoordinats()
-
         val lst = mutableListOf<ColourDis_Model>()
 
-    //    lst.addAll(runInThread(pixelCoordinates))
 
+        val listSize = pixelCoordinates.size    // get the size of the list
 
-//        GlobalScope.launch(Dispatchers.IO) {
-//            Runnable { runInThread(pixelCoordinates) }
-//            Log.d("theard", "therd done")
-//        }
-
-//        val t1 = Thread(
-//            Runnable {
-//                lst.addAll(runInThread(pixelCoordinates))
-//                for (item in lst)
-//                {
-//                    Log.d("theard", "list of res : ${item.colour1.red}")
-//                }
-//            }
-//        )
-//        t1.state
-//
-//
-//
-//        Thread.sleep(1000)
-//
-//        for (item in lst)
-//        {
-//            Log.d("theard", "list of res : ${item.Cont2}")
-//        }
-//        for (item in pixelCoordinates){
-//            val coordinateAndColourCodePair = GetCollour(item.x, item.y)
-//            val xyCoord = coordinateAndColourCodePair.first
-//            val rgbColour = coordinateAndColourCodePair.second
-//            coordinateAndColourCodeHmap[xyCoord] = rgbColour
-//        }
-//        val diffColourLst = GetDifficeNum(coordinateAndColourCodeHmap)
-//        val coloursUsed = FindTheMustUsedCollour(coordinateAndColourCodeHmap, diffColourLst)
-//        val coverted = ConvertToColourModel(coloursUsed)
-//        val lst = calcdisLowerthen20(coverted)
-
-
-        val n = pixelCoordinates.size    // get the size of the list
-
-        val pixelCoordinates1 = pixelCoordinates.subList(0, (n + 1) / 2)
-        val pixelCoordinates2 = pixelCoordinates.subList((n + 1) / 2, n)
+        val pixelCoordinates1 = pixelCoordinates.subList(0, (listSize + 1) / 2)
+        val pixelCoordinates2 = pixelCoordinates.subList((listSize + 1) / 2, listSize)
 
         val lstFromT1 = TheardLst(pixelCoordinates1)
         val lstFromT2 = TheardLst((pixelCoordinates2))
         lst.addAll(lstFromT1)
         lst.addAll(lstFromT2)
-        for (item in lst)
-        {
-            Log.d("theard", "list of res : ${item.Cont2}")
-        }
-        Log.d("theard", "groupe start")
+//        for (item in lst)
+//        {
+//            Log.d("theard", "list of res : ${item.Cont2}")
+//        }
+//        Log.d("theard", "groupe start")
         val groups = GrupeColour(lst)
         val sum = SumCount(groups)
         val top5 = Top5(sum)
 
         printToTxtbox(top5)
     }
+
+
     fun TheardLst(pixelCoordinates:List<CoordinateModel>): List<ColourDis_Model> = runBlocking{
         runInThread(pixelCoordinates)
-    //        val res = mutableListOf<ColourDis_Model>()
-
-
-//        fun sum(): Int = runBlocking {
-//            funA().await() + funB().await()
-//        }
-
-//        val f = GlobalScope.launch {
-//            val ans = async { Runnable { res.addAll(runInThread(pixelCoordinates)) } }
-//            val a = ans.await()
-//            Log.d("theard", "theard is done $a")
-//        }
-
-//        Thread.sleep(1000)
-//        for (item in res){
-//            Log.d("theard", "list of res : ${item.Cont2}")
-//        }
-////        val ff = f.toString()
-//        Log.d("theard","metode is done")
-//        CoroutineScope(Dispatchers.IO){
-//            val job =
-//            val d = f.await()
-//        }
 
     }
 
-     fun runInThread(pixelCoordinates:List<CoordinateModel>):List<ColourDis_Model>{
+
+    fun runInThread(pixelCoordinates:List<CoordinateModel>):List<ColourDis_Model>{
         val coordinateAndColourCodeHmap = HashMap<CoordinateModel, ColourModel>()
         for (item in pixelCoordinates){
             val coordinateAndColourCodePair = GetCollour(item.x, item.y)
@@ -138,6 +77,7 @@ class MainActivity : AppCompatActivity() {
         return lst
     }
 
+
     fun printToTxtbox(lst:HashMap<Int, ColourModel>){
         val txtBox = findViewById<TextView>(R.id.textView)
         var text = ""
@@ -148,23 +88,13 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+
     fun Top5(hm:HashMap<Int, ColourModel>):HashMap<Int, ColourModel>{
         var count = 0
         val hms = hm.toSortedMap(reverseOrder())
         val lst = HashMap<Int, ColourModel>()
 
 
-//        for (item in hms){
-//            count += 1
-//            if (count == 5){
-//                return lst
-//
-//            }
-//            else{
-//                lst.remove(item.key)
-//            }
-//
-//        }
         for (i in hms){
             count += 1
             if (count == 6){
@@ -176,6 +106,7 @@ class MainActivity : AppCompatActivity() {
         }
         return hm
     }
+
 
     fun ConvertToColourModel(strHmap:HashMap<String, Int>):HashMap<ColourModel, Int>{
         val hMap = HashMap<ColourModel, Int>()
@@ -234,16 +165,9 @@ class MainActivity : AppCompatActivity() {
 
 
     fun GrupeColour(xycoordAndRgbColour:List<ColourDis_Model>): List<ColourGroupe>{
-        val groupeLst = mutableListOf<ColourGroupe>()
         var groupeNum = 0
 
-        val has = HashMap<String, ColourGroupe>()
-
-////        val discalc = Calculator().calculate_distance()
-//        for (item in xycoordAndRgbColour){
-//
-//        }
-
+        val rgbAndGrouplst = HashMap<String, ColourGroupe>()
         for (item in xycoordAndRgbColour) {
             Log.d(
                 "grpus",
@@ -254,35 +178,25 @@ class MainActivity : AppCompatActivity() {
             val green = item.colour1.green
             val red = item.colour1.red
 
-            val i = "$red,$green,$blue"
+            val strRgbColour = "$red,$green,$blue"
 
-            has[i] = ColourGroupe(groupeNum, item.colour2, item.Cont2)
+            rgbAndGrouplst[strRgbColour] = ColourGroupe(groupeNum, item.colour2, item.Cont2)
 
         }
 
-        val f = mutableListOf<ColourGroupe>()
-        for (item in has){
-            for (item2 in has){
+        val grupeColourlst = mutableListOf<ColourGroupe>()
+        for (item in rgbAndGrouplst){
+            for (item2 in rgbAndGrouplst){
                 if (item.key == item2.key){
                     groupeNum += 1
-                    f.add(ColourGroupe(groupeNum, item2.value.colour, item2.value.count))
+                    grupeColourlst.add(ColourGroupe(groupeNum, item2.value.colour, item2.value.count))
                 }
             }
         }
 
-        //            val groupeItemLst = mutableListOf<GroupeItem_Model>()
-
-
-
-//            val coord = item
-//            val rgbColour = item.
-//            val groupeItem = GroupeItem_Model(coord, rgbColour)
-//            groupeItemLst.add(groupeItem)
-//            groupeLst.add(ColourGroupe(groupeNum, groupeItemLst.toList()))
-
-
-        return f
+        return grupeColourlst
     }
+
 
     fun SumCount(lst:List<ColourGroupe>): HashMap<Int, ColourModel>{
         var cout = 0
@@ -302,7 +216,6 @@ class MainActivity : AppCompatActivity() {
 
         return hm
     }
-
 
 
     fun calcdisLowerthen20(xycoordAndRgbColour:HashMap<ColourModel, Int>):List<ColourDis_Model>{
@@ -327,17 +240,6 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    fun test (rgbCollourLst:List<ColourModel>):List<Int>{
-        val outputLst = mutableListOf<Int>()
-
-        for (item in rgbCollourLst){
-            val collourNum = item.red + item.green + item.blue
-            outputLst.add(collourNum)
-        }
-
-        return  outputLst
-    }
-
     fun FindTheMustUsedCollour(numLst:HashMap<CoordinateModel, ColourModel>, diffNumslst:List<ColourModel>):HashMap<String, Int>{
         val hmap = HashMap<String, Int>()
         val test = mutableListOf<ColourModel>()
@@ -360,48 +262,8 @@ class MainActivity : AppCompatActivity() {
         }
 
         return hmap
-
-
-
-//        for (item in numLst){
-//            var count = 0
-//            for (item2 in test){
-//                Log.d("t" , "log : ${item.value.red}, ${item.value.green}, ${item.value.blue}")
-//
-//                if (item.value.red == item2.red && item.value.green == item2.green && item.value.blue == item2.blue){
-//                    count += 1
-//
-//                }
-//            }
-//
-//            hmap[count] = ColourModel(item.value.red, item.value.green, item.value.blue)
-//        }
-//
-//        val t =""
-
-
-//        val map = HashMap<ColourModel, Int>()
-//        for (item in diffNumslst){
-////            val tes = numLst.count{it == 706}
-//            val tesAll = numLst.count{it.value == item}
-//            map.put(ColourModel(item.red,item.green,item.blue), tesAll)
-//        }
-//
-//        var value = 0
-//        var biggest = 0
-//        for (item in map) {
-//            if (biggest < item.value) {
-//                value = item.key
-//                biggest = item.value
-//            }
-//        }
-//        value
-//        biggest
-
-//        map.toSortedMap()
-//        val t = ""
-
     }
+
 
     fun GetDifficeNum(numlst:HashMap<CoordinateModel, ColourModel>):List<ColourModel>{
         val diffLst = mutableListOf<ColourModel>()
