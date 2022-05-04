@@ -11,6 +11,8 @@ import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import kotlinx.coroutines.*
+import java.lang.Runnable
 import java.util.*
 import kotlin.collections.HashMap
 
@@ -28,10 +30,93 @@ class MainActivity : AppCompatActivity() {
 
 
     fun btnClick(view: View){
-        val coordinateAndColourCodeHmap = HashMap<CoordinateModel, ColourModel>()
+//        val coordinateAndColourCodeHmap = HashMap<CoordinateModel, ColourModel>()
 
         val pixelCoordinates = GetPixelesCoordinats()
 
+        val lst = mutableListOf<ColourDis_Model>()
+
+    //    lst.addAll(runInThread(pixelCoordinates))
+
+
+//        GlobalScope.launch(Dispatchers.IO) {
+//            Runnable { runInThread(pixelCoordinates) }
+//            Log.d("theard", "therd done")
+//        }
+
+//        val t1 = Thread(
+//            Runnable {
+//                lst.addAll(runInThread(pixelCoordinates))
+//                for (item in lst)
+//                {
+//                    Log.d("theard", "list of res : ${item.colour1.red}")
+//                }
+//            }
+//        )
+//        t1.state
+//
+//
+//
+//        Thread.sleep(1000)
+//
+//        for (item in lst)
+//        {
+//            Log.d("theard", "list of res : ${item.Cont2}")
+//        }
+//        for (item in pixelCoordinates){
+//            val coordinateAndColourCodePair = GetCollour(item.x, item.y)
+//            val xyCoord = coordinateAndColourCodePair.first
+//            val rgbColour = coordinateAndColourCodePair.second
+//            coordinateAndColourCodeHmap[xyCoord] = rgbColour
+//        }
+//        val diffColourLst = GetDifficeNum(coordinateAndColourCodeHmap)
+//        val coloursUsed = FindTheMustUsedCollour(coordinateAndColourCodeHmap, diffColourLst)
+//        val coverted = ConvertToColourModel(coloursUsed)
+//        val lst = calcdisLowerthen20(coverted)
+
+
+        val f = getT(pixelCoordinates)
+        for (item in f)
+        {
+            Log.d("theard", "list of res : ${item.Cont2}")
+        }
+        Log.d("theard", "groupe start")
+        val groups = GrupeColour(lst)
+        val sum = SumCount(groups)
+        val top5 = Top5(sum)
+
+        printToTxtbox(top5)
+    }
+    fun T1(pixelCoordinates:List<CoordinateModel>): List<ColourDis_Model> = runBlocking{
+        runInThread(pixelCoordinates)
+    //        val res = mutableListOf<ColourDis_Model>()
+
+
+//        fun sum(): Int = runBlocking {
+//            funA().await() + funB().await()
+//        }
+
+//        val f = GlobalScope.launch {
+//            val ans = async { Runnable { res.addAll(runInThread(pixelCoordinates)) } }
+//            val a = ans.await()
+//            Log.d("theard", "theard is done $a")
+//        }
+
+//        Thread.sleep(1000)
+//        for (item in res){
+//            Log.d("theard", "list of res : ${item.Cont2}")
+//        }
+////        val ff = f.toString()
+//        Log.d("theard","metode is done")
+//        CoroutineScope(Dispatchers.IO){
+//            val job =
+//            val d = f.await()
+//        }
+
+    }
+
+    suspend fun runInThread(pixelCoordinates:List<CoordinateModel>):List<ColourDis_Model>{
+        val coordinateAndColourCodeHmap = HashMap<CoordinateModel, ColourModel>()
         for (item in pixelCoordinates){
             val coordinateAndColourCodePair = GetCollour(item.x, item.y)
             val xyCoord = coordinateAndColourCodePair.first
@@ -42,14 +127,7 @@ class MainActivity : AppCompatActivity() {
         val coloursUsed = FindTheMustUsedCollour(coordinateAndColourCodeHmap, diffColourLst)
         val coverted = ConvertToColourModel(coloursUsed)
         val lst = calcdisLowerthen20(coverted)
-
-        val groups = GrupeColour(lst)
-        val sum = SumCount(groups)
-        val top5 = Top5(sum)
-
-        printToTxtbox(top5)
-        val t = ""
-
+        return lst
     }
 
     fun printToTxtbox(lst:HashMap<Int, ColourModel>){
