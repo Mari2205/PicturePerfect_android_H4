@@ -75,8 +75,16 @@ class MainActivity : AppCompatActivity() {
 //        val lst = calcdisLowerthen20(coverted)
 
 
-        val f = getT(pixelCoordinates)
-        for (item in f)
+        val n = pixelCoordinates.size    // get the size of the list
+
+        val pixelCoordinates1 = pixelCoordinates.subList(0, (n + 1) / 2)
+        val pixelCoordinates2 = pixelCoordinates.subList((n + 1) / 2, n)
+
+        val lstFromT1 = TheardLst(pixelCoordinates1)
+        val lstFromT2 = TheardLst((pixelCoordinates2))
+        lst.addAll(lstFromT1)
+        lst.addAll(lstFromT2)
+        for (item in lst)
         {
             Log.d("theard", "list of res : ${item.Cont2}")
         }
@@ -87,7 +95,7 @@ class MainActivity : AppCompatActivity() {
 
         printToTxtbox(top5)
     }
-    fun T1(pixelCoordinates:List<CoordinateModel>): List<ColourDis_Model> = runBlocking{
+    fun TheardLst(pixelCoordinates:List<CoordinateModel>): List<ColourDis_Model> = runBlocking{
         runInThread(pixelCoordinates)
     //        val res = mutableListOf<ColourDis_Model>()
 
@@ -115,7 +123,7 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    suspend fun runInThread(pixelCoordinates:List<CoordinateModel>):List<ColourDis_Model>{
+     fun runInThread(pixelCoordinates:List<CoordinateModel>):List<ColourDis_Model>{
         val coordinateAndColourCodeHmap = HashMap<CoordinateModel, ColourModel>()
         for (item in pixelCoordinates){
             val coordinateAndColourCodePair = GetCollour(item.x, item.y)
