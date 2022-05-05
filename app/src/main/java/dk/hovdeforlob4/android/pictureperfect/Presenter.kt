@@ -101,16 +101,31 @@ class Presenter : Present{
         val hms = hm.toSortedMap(reverseOrder())
         val lst = HashMap<Int, ColourModel>()
 
+//        val g = hms.toString()
+//        val hh = hms.keys.size
+//        val tt = hms.keys
+//        val hhh = hms.keys.filter { it > 5 }
+//      val hhhh = hms.keys.filterIndexed(5)
 
-        for (i in hms){
-            count += 1
-            if (count == 6){
-                return lst
-            }
-            else{
-                lst[i.key] = i.value
-            }
-        }
+        val lstOfKeys = hms.keys.take(5)
+        val top5BiggestElements = hms.filter { x -> lstOfKeys.contains(x.key) }
+
+//      val hhhhhh = hms.subMap(hhhhh[0],)
+//        val f = hms.toString().length
+//        hms.size
+        //val h:HashMap<Int, ColourModel> = hms.filter {  }
+//        val h = hms.subMap(0, 5)
+
+//        for (i in hms){
+//            count += 1
+//            if (count == 6){
+//                return lst
+//            }
+//            else{
+//                lst[i.key] = i.value
+//            }
+//        }
+
         return hm
     }
 

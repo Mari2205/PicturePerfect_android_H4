@@ -41,7 +41,7 @@ class MainActivity : AppCompatActivity() {
          val pixelCoordinates = getPixelesCoordinats()
 
         val presenter:Present = Presenter()
-        val top5 = presenter.GiveTop5(pixelCoordinates)
+        val top5 = presenter.GiveTop5Colours(pixelCoordinates)
         printToTxtbox(top5)
     }
 
