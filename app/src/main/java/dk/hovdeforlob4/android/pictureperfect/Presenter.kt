@@ -7,7 +7,8 @@ class Presenter : Present{
 
     val imageUtilities = ImageUtility()
 
-    override fun GiveTop5Colours(pixelCoordinates: List<CoordinateModel>): HashMap<Int, ColourModel> {
+
+    override fun GiveTop5Colours(pixelCoordinates: List<CoordinateModel>):Map<Int, ColourModel>{
         val lst = mutableListOf<ColourDis_Model>()
 
         val listSize = pixelCoordinates.size
@@ -23,7 +24,7 @@ class Presenter : Present{
         val groups = imageUtilities.grupeColour(lst)
         val sum = SumCount(groups)
         val top5 = FindTop5(sum)
-        return  top5
+        return top5
     }
 
 
@@ -70,11 +71,15 @@ class Presenter : Present{
     }
 
 
+    //TODO:
+    // funtion find an better name (get elements that an colour distances lower then 20)
+    // prop maybe find better name
+    // output lst find better name
     private fun calcdisLowerthen20(xycoordAndRgbColour:HashMap<ColourModel, Int>):List<ColourDis_Model>{
         val calc = Calculator()
         val disLst = mutableListOf<ColourDis_Model>()
 
-        Log.d("tag", "clac met run")
+//        Log.d("tag", "clac met run")
 
         for (item1 in xycoordAndRgbColour){
             for (item2 in xycoordAndRgbColour){
@@ -82,7 +87,7 @@ class Presenter : Present{
                     val dis = calc.calculateColourDistance(item1.key, item2.key)
                     if (dis <= 20.0){
                         disLst.add(ColourDis_Model(dis, item1.key, item2.key, item1.value, item2.value))
-                        Log.d("tag", "loop")
+//                        Log.d("tag", "loop")
                     }
 
                 }
@@ -93,40 +98,14 @@ class Presenter : Present{
 
     //TODO:
     // fun maybe better name
-    // valribale find an better name then "hm"
-    // fix for wtih maybe a substring??
-    // genral better variable names
-    private fun FindTop5(hm:HashMap<Int, ColourModel>):HashMap<Int, ColourModel>{
-        var count = 0
-        val hms = hm.toSortedMap(reverseOrder())
-        val lst = HashMap<Int, ColourModel>()
+    // prop find an better name then "hm"
+    private fun FindTop5(hmOfPixelCountAndColourModel:HashMap<Int, ColourModel>):Map<Int, ColourModel>{
+        val hmOfPixelCountAndColourModelSorted = hmOfPixelCountAndColourModel.toSortedMap(reverseOrder())
 
-//        val g = hms.toString()
-//        val hh = hms.keys.size
-//        val tt = hms.keys
-//        val hhh = hms.keys.filter { it > 5 }
-//      val hhhh = hms.keys.filterIndexed(5)
+        val lstOfKeys = hmOfPixelCountAndColourModelSorted.keys.take(5)
+        val top5BiggestElements = hmOfPixelCountAndColourModelSorted.filter { x -> lstOfKeys.contains(x.key) }.toMutableMap()
 
-        val lstOfKeys = hms.keys.take(5)
-        val top5BiggestElements = hms.filter { x -> lstOfKeys.contains(x.key) }
-
-//      val hhhhhh = hms.subMap(hhhhh[0],)
-//        val f = hms.toString().length
-//        hms.size
-        //val h:HashMap<Int, ColourModel> = hms.filter {  }
-//        val h = hms.subMap(0, 5)
-
-//        for (i in hms){
-//            count += 1
-//            if (count == 6){
-//                return lst
-//            }
-//            else{
-//                lst[i.key] = i.value
-//            }
-//        }
-
-        return hm
+        return top5BiggestElements
     }
 
 }

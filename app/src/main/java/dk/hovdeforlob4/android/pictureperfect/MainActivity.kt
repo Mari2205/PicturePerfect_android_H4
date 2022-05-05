@@ -46,7 +46,7 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    private fun printToTxtbox(lst:HashMap<Int, ColourModel>){
+    private fun printToTxtbox(lst:Map<Int, ColourModel>){
         val txtBox = findViewById<TextView>(R.id.textView)
 
         txtBox.apply {
