@@ -4,10 +4,10 @@ package dk.hovdeforlob4.android.pictureperfect
 class Calculator {
 
     /**
-     * this method calculate the value between two values of the type CollourModel
-     * @param collour1 : CollourModel
-     * @param collour2 : CollourModel
-     * @return Double
+     * this method calculate the value between two values of the type ColourModel
+     * @param collour1 : ColourModel | takes an colourModel
+     * @param collour2 : ColourModel | takes an colourModel
+     * @return Double | returns an decimal number of the colour distances
      */
     fun calculateColourDistance(collour1:ColourModel, collour2: ColourModel): Double{
         val redC1   = collour1.red.toDouble()

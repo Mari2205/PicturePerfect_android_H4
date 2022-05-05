@@ -7,7 +7,7 @@ class Presenter : Present{
 
     val imageUtilities = ImageUtility()
 
-    override fun GiveTop5(pixelCoordinates: List<CoordinateModel>): HashMap<Int, ColourModel> {
+    override fun GiveTop5Colours(pixelCoordinates: List<CoordinateModel>): HashMap<Int, ColourModel> {
         val lst = mutableListOf<ColourDis_Model>()
 
         val listSize = pixelCoordinates.size
@@ -91,7 +91,11 @@ class Presenter : Present{
         return disLst
     }
 
-
+    //TODO:
+    // fun maybe better name
+    // valribale find an better name then "hm"
+    // fix for wtih maybe a substring??
+    // genral better variable names
     private fun FindTop5(hm:HashMap<Int, ColourModel>):HashMap<Int, ColourModel>{
         var count = 0
         val hms = hm.toSortedMap(reverseOrder())

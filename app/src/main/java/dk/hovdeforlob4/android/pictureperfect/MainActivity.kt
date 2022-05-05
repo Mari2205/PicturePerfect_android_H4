@@ -10,6 +10,7 @@ import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.view.isVisible
 import kotlin.collections.HashMap
 
 val REQUEST_IMAGE_CAPTURE = 1
@@ -22,9 +23,10 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+
     /**
     * this method takes an image what an intent to the phone camera
-    * @param view: View
+    * @param view: View | view is the view of the widget there is call this fun
     */
     fun takepicture_btnclick(view: View){
         dispatchTakePictureIntent(view)
@@ -33,7 +35,7 @@ class MainActivity : AppCompatActivity() {
 
     /**
      * this method is run btn clicked finds the top 5 must used colours in an image
-     * @param view: View
+     * @param view: View | view is the view of the widget there is call this fun
      */
     fun btnClick(view: View){
          val pixelCoordinates = getPixelesCoordinats()
@@ -46,37 +48,36 @@ class MainActivity : AppCompatActivity() {
 
     private fun printToTxtbox(lst:HashMap<Int, ColourModel>){
         val txtBox = findViewById<TextView>(R.id.textView)
-        var text = ""
-        for (item in lst){
-            text += "ca count of pixels : ${item.key} - colour nyance : [${item.value.red}, ${item.value.green}, ${item.value.blue}]\n"
+
+        txtBox.apply {
+            isVisible = true
+            for (item in lst){
+                text = text.toString() +
+                        "\nca count of pixels : ${item.key} - " +
+                        "colour nyance : [${item.value.red}, ${item.value.green}, ${item.value.blue}]"
+            }
         }
-        txtBox.text = text
 
     }
 
 
     private fun getPixelesCoordinats():List<CoordinateModel>{
-        // TODO needs cleaning
+        val coordinatesLst = mutableListOf<CoordinateModel>()
         val imHeight = bitmap_image.height
         val imWidth = bitmap_image.width
+        var totalPixelCount = 0
+        val logTag = "pixelCount"
 
-        val coordinatesLst = mutableListOf<CoordinateModel>()
-        // X = width and Y = Height
-        var heightCount:Int = 0
-        var totalCount:Int = 0
-        for (P in 0 until imHeight-1) {
-            heightCount += 1
-            var widthCount:Int = 0
-            Log.d("count", "Height count is $heightCount")
-            for (pixel in 0 until imWidth-1) {
-                widthCount += 1
-                totalCount += 1
-                Log.d("count", "Wigth count is $widthCount")
+        for (heightPixelIndex in 0 until imHeight - 1) {
+            for (widthPixelIndex in 0 until imWidth - 1) {
 
-                coordinatesLst.add(CoordinateModel(widthCount, heightCount))
+                totalPixelCount += 1
+                Log.d(logTag, "Coordinate index is X: [$widthPixelIndex], Y: [$heightPixelIndex]")
+
+                coordinatesLst.add(CoordinateModel(widthPixelIndex, heightPixelIndex))
             }
         }
-        Log.d("count", "total count of pixles is ${totalCount.toString()}")
+        Log.d(logTag, "The total number of pixels is $totalPixelCount")
 
         return coordinatesLst
     }
@@ -86,8 +87,8 @@ class MainActivity : AppCompatActivity() {
         val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         try {
             startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE)
-        } catch (e: ActivityNotFoundException) {
-            Log.e("err", "Error mgs: ${e.toString()}")
+        } catch (errMsg: ActivityNotFoundException) {
+            Log.e("err", "Error mgs: $errMsg")
         }
     }
 
@@ -101,10 +102,8 @@ class MainActivity : AppCompatActivity() {
             val imageBitmap = data?.extras?.get("data") as Bitmap
 
             imageView_picture.setImageBitmap(imageBitmap)
-//            val bitmap_imag:Bitmap = imageBitmap
             bitmap_image = imageBitmap
         }
     }
-
 
 }
